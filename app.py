@@ -110,8 +110,8 @@ if img is not None:
     # 3D y agujas
     if st.sidebar.checkbox('Mostrar 3D', True):
         if 'needles' not in st.session_state:
-    st.session_state['needles'] = []
-        resized = resize(original, (64,64,64), anti_aliasing=True)
+            st.session_state['needles'] = []
+            resized = resize(original, (64,64,64), anti_aliasing=True)
         if 'needles' not in st.session_state:
             st.session_state['needles'] = []
 

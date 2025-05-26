@@ -106,56 +106,63 @@ if img is not None:
             img2d = apply_window(data, ww, wc)
             if invert: img2d = 1 - img2d
             ax.imshow(img2d, cmap='gray', origin='lower'); st.pyplot(fig)
+# 3D y agujas
+if st.sidebar.checkbox('Mostrar 3D', True):
+    if 'needles' not in st.session_state:
+        st.session_state['needles'] = []
 
-    # 3D y agujas
-    if st.sidebar.checkbox('Mostrar 3D', True):
-        if 'needles' not in st.session_state:
-            st.session_state['needles'] = []
-            resized = resize(original, (64,64,64), anti_aliasing=True)
+    if 'auto_generated' not in st.session_state:
+        st.session_state['needles'] = []
+        resized = resize(original, (64, 64, 64), anti_aliasing=True)
 
-        # Generar automáticamente 10 agujas fijas con Z aleatorio
-        if 'auto_generated' not in st.session_state:
-            st.session_state['needles'] = []
-            for _ in range(10):
-                z = random.uniform(29, 36)
-                p1 = (32.0, 32.0, z)
-                p2 = (39.0, 32.0, z)
-                color = f"#{random.randint(0, 0xFFFFFF):06x}"
+        # Generar automáticamente 10 agujas fijas con Y y Z aleatorios
+        for _ in range(10):
+            y = random.uniform(30, 35)
+            z = random.uniform(29, 36)
+            p1 = (32.0, y, z)
+            p2 = (39.0, y, z)
+            color = f"#{random.randint(0, 0xFFFFFF):06x}"
+            st.session_state['needles'].append({
+                'points': (p1, p2),
+                'color': color,
+                'curved': False
+            })
+        st.session_state['auto_generated'] = True
+
+    # Controles de creación con cantidad múltiple
+    with st.expander('Nueva aguja'):
+        mode = st.radio('Modo', ['Manual', 'Aleatoria'], horizontal=True)
+        shape = st.radio('Forma', ['Recta', 'Curva'], horizontal=True)
+        count = st.number_input('Cantidad aleatoria', min_value=1, value=1, step=1)
+        
+        if mode == 'Manual':
+            c1, c2 = st.columns(2)
+            with c1:
+                x1 = st.number_input('X1', 0.0, 64.0, 32.0)
+                y1 = st.number_input('Y1', 0.0, 64.0, 32.0)
+                z1 = st.number_input('Z1', 0.0, 64.0, 32.0)
+            with c2:
+                x2 = st.number_input('X2', 0.0, 64.0, 39.0)
+                y2 = st.number_input('Y2', 0.0, 64.0, 32.0)
+                z2 = st.number_input('Z2', 0.0, 64.0, 32.0)
+
+        if st.button('Agregar aguja'):
+            times = count if mode == 'Aleatoria' else 1
+            for _ in range(times):
+                if mode == 'Aleatoria':
+                    y = random.uniform(30, 35)
+                    z = random.uniform(29, 36)
+                    p1 = (32.0, y, z)
+                    p2 = (39.0, y, z)
+                else:
+                    p1 = (x1, y1, z1)
+                    p2 = (x2, y2, z2)
+
                 st.session_state['needles'].append({
                     'points': (p1, p2),
-                    'color': color,
-                    'curved': False
+                    'color': f"#{random.randint(0, 0xFFFFFF):06x}",
+                    'curved': (shape == 'Curva')
                 })
-            st.session_state['auto_generated'] = True
-
-        # Controles de creación con cantidad múltiple
-        with st.expander('Nueva aguja'):
-            mode = st.radio('Modo', ['Manual','Aleatoria'], horizontal=True)
-            shape = st.radio('Forma', ['Recta','Curva'], horizontal=True)
-            count = st.number_input('Cantidad aleatoria', min_value=1, value=1, step=1)
-            if mode == 'Manual':
-                c1, c2 = st.columns(2)
-                with c1:
-                    x1 = st.number_input('X1', 0.0, 64.0, 32.0)
-                    y1 = st.number_input('Y1', 0.0, 64.0, 32.0)
-                    z1 = st.number_input('Z1', 0.0, 64.0, 32.0)
-                with c2:
-                    x2 = st.number_input('X2', 0.0, 64.0, 32.0)
-                    y2 = st.number_input('Y2', 0.0, 64.0, 32.0)
-                    z2 = st.number_input('Z2', 0.0, 64.0, 32.0)
-            if st.button('Agregar aguja'):
-                # Generar una o varias según modo
-                times = count if mode == 'Aleatoria' else 1
-                for _ in range(times):
-                    if mode == 'Aleatoria':
-                        xa,ya,za = [random.uniform(7,35) for _ in range(3)]
-                        xb,yb,zb = [random.uniform(30,45) for _ in range(3)]
-                    pts = ((x1,y1,z1),(x2,y2,z2)) if mode == 'Manual' else ((xa,ya,za),(xb,yb,zb))
-                    st.session_state['needles'].append({
-                        'points': pts,
-                        'color': f"#{random.randint(0,0xFFFFFF):06x}",
-                        'curved': (shape == 'Curva')
-                    })
 
         # Tabla editable
         st.markdown('### Registro de agujas')

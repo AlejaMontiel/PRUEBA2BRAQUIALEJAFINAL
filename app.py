@@ -88,6 +88,7 @@ if img is not None:
         orientation = st.sidebar.selectbox('Corte', ['Axial','Coronal','Sagital'])
         idx = st.sidebar.slider('Índice', 0, img.shape[['Axial','Coronal','Sagital'].index(orientation)]-1,
                                  img.shape[['Axial','Coronal','Sagital'].index(orientation)]//2)
+
     invert = st.sidebar.checkbox('Negativo', False)
     wtype = st.sidebar.selectbox('Tipo ventana', ['Default','Abdomen','Hueso','Pulmón'])
     presets = {'Abdomen':(400,40),'Hueso':(2000,500),'Pulmón':(1500,-600)}
@@ -98,6 +99,7 @@ if img is not None:
         'Coronal': img[:,idx,:],
         'Sagital': img[:,:,idx]
     }
+
     cols = st.columns(3)
     for col,(name,data) in zip(cols, slices.items()):
         with col:
@@ -107,13 +109,13 @@ if img is not None:
             if invert: img2d = 1 - img2d
             ax.imshow(img2d, cmap='gray', origin='lower'); st.pyplot(fig)
 
-   # 3D y agujas
+    # 3D y agujas
     if st.sidebar.checkbox('Mostrar 3D', True):
         if 'needles' not in st.session_state:
             st.session_state['needles'] = []
             resized = resize(original, (64,64,64), anti_aliasing=True)
 
-     # Generar automáticamente 10 agujas fijas con Z aleatorio
+        # Generar automáticamente 10 agujas fijas con Z aleatorio
         if 'auto_generated' not in st.session_state:
             st.session_state['needles'] = []
             for _ in range(10):
@@ -159,13 +161,14 @@ if img is not None:
 
         # Tabla editable
         st.markdown('### Registro de agujas')
-        df = pd.DataFrame([{{'ID':i+1,
-                                'X1':round(p[0],1),'Y1':round(p[1],1),'Z1':round(p[2],1),
-                                'X2':round(q[0],1),'Y2':round(q[1],1),'Z2':round(q[2],1),
-                                'Color':d['color'],'Forma':('Curva' if d['curved'] else 'Recta'),'Eliminar':False}}
-                             for i,d in enumerate(st.session_state['needles'])
-                             for p,q in [d['points']]])
+        df = pd.DataFrame([{
+            'ID':i+1,
+            'X1':round(p[0],1),'Y1':round(p[1],1),'Z1':round(p[2],1),
+            'X2':round(q[0],1),'Y2':round(q[1],1),'Z2':round(q[2],1),
+            'Color':d['color'],'Forma':('Curva' if d['curved'] else 'Recta'),'Eliminar':False
+        } for i,d in enumerate(st.session_state['needles']) for p,q in [d['points']]])
         edited = st.data_editor(df, use_container_width=True)
+
         # Actualizar estado
         st.session_state['needles'] = []
         for _, r in edited.iterrows():
@@ -182,46 +185,15 @@ if img is not None:
         for d in st.session_state['needles']:
             (x1,y1,z1),(x2,y2,z2) = d['points']
             if d['curved']:
-                t = np.linspace(0,1,50);
-                xs = x1*(1-t)+x2*t; ys = y1*(1-t)+y2*t;
+                t = np.linspace(0,1,50)
+                xs = x1*(1-t)+x2*t; ys = y1*(1-t)+y2*t
                 zs = z1*(1-t)+z2*t + 5*np.sin(np.pi*t)
             else:
                 xs, ys, zs = [x1,x2], [y1,y2], [z1,z2]
             fig3d.add_trace(go.Scatter3d(
                 x=xs, y=ys, z=zs, mode='lines+markers',
                 marker=dict(size=4, color=d['color']),
-                line=dict(width=3, color=d['color'])
+                line=dict(color=d['color'], width=4)
             ))
-        fig3d.update_layout(margin=dict(l=0,r=0,b=0,t=0))
-        st.subheader('Vista 3D')
-        st.plotly_chart(fig3d, use_container_width=True)
 
-# Pie de página
-st.markdown('<p class="giant-title">BrachyCervix</p>', unsafe_allow_html=True)
-st.markdown("""
-<hr>
-<div style="text-align:center;color:#28aec5;font-size:50px;">
-    BrachyCervix - Semiautomátización y visor para procesos de braquiterapia enfocados en el Cervix
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    Proyecto asignatura medialab 3
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    Universidad EAFIT
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    Clínica Las Américas AUNA
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    - Nicolás Ramirez
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    - Alejandra Montiel
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    - María Camila Díaz
-</div>
-<div style="text-align:center;color:#28aec5;font-size:20px;">
-    - María Paula Jaimes
-</div>
-""", unsafe_allow_html=True)
+        st.plotly_chart(fig3d, use_container_width=True)

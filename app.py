@@ -107,13 +107,13 @@ if img is not None:
             if invert: img2d = 1 - img2d
             ax.imshow(img2d, cmap='gray', origin='lower'); st.pyplot(fig)
 
-    # 3D y agujas
+   # 3D y agujas
     if st.sidebar.checkbox('Mostrar 3D', True):
         if 'needles' not in st.session_state:
             st.session_state['needles'] = []
             resized = resize(original, (64,64,64), anti_aliasing=True)
 
-        # Generar automáticamente 10 agujas fijas con Z aleatorio
+     # Generar automáticamente 10 agujas fijas con Z aleatorio
         if 'auto_generated' not in st.session_state:
             st.session_state['needles'] = []
             for _ in range(10):
@@ -128,7 +128,6 @@ if img is not None:
                 })
             st.session_state['auto_generated'] = True
 
-    
         # Controles de creación con cantidad múltiple
         with st.expander('Nueva aguja'):
             mode = st.radio('Modo', ['Manual','Aleatoria'], horizontal=True)

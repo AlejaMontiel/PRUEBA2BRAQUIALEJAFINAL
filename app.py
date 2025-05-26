@@ -116,21 +116,24 @@ if st.sidebar.checkbox('Mostrar 3D', True):
     # Asegurar que resized siempre esté definido
     resized = resize(original, (64, 64, 64), anti_aliasing=True)
 
-    if 'auto_generated' not in st.session_state:
-        st.session_state['needles'] = []
-        # Generar automáticamente 10 agujas fijas con Y y Z aleatorios
-        for _ in range(10):
-            y = random.uniform(30, 35)
-            z = random.uniform(29, 36)
-            p1 = (32.0, y, z)
-            p2 = (39.0, y, z)
-            color = f"#{random.randint(0, 0xFFFFFF):06x}"
-            st.session_state['needles'].append({
-                'points': (p1, p2),
-                'color': color,
-                'curved': False
-            })
-        st.session_state['auto_generated'] = True
+if 'auto_generated' not in st.session_state:
+    st.session_state['needles'] = []
+    # Generar automáticamente 10 agujas fijas con Y y Z aleatorios
+    for _ in range(10):
+        y = random.uniform(30, 35)
+        z = random.uniform(29, 36)
+        x1 = 32.0
+        x2 = 39.0
+        p1 = (x1, y, z)
+        p2 = (x2, y, z)
+        color = f"#{random.randint(0, 0xFFFFFF):06x}"
+        st.session_state['needles'].append({
+            'points': (p1, p2),
+            'color': color,
+            'curved': False
+        })
+    st.session_state['auto_generated'] = True
+
 
     # Controles de creación con cantidad múltiple
     with st.expander('Nueva aguja'):

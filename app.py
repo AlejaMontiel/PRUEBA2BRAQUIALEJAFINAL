@@ -120,8 +120,9 @@ if img is not None:
             st.session_state['needles'] = []
             for _ in range(10):
                 z = random.uniform(29, 36)
-                p1 = (32.0, 32.0, z)
-                p2 = (39.0, 32.0, z)
+                y = random.uniform(30, 36)
+                p1 = (32.0, y, z)
+                p2 = (39.0, y, z)
                 color = f"#{random.randint(0, 0xFFFFFF):06x}"
                 st.session_state['needles'].append({
                     'points': (p1, p2),

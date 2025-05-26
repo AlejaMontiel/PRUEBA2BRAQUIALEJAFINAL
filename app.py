@@ -128,6 +128,7 @@ if img is not None:
                 })
             st.session_state['auto_generated'] = True
 
+    
         # Controles de creación con cantidad múltiple
         with st.expander('Nueva aguja'):
             mode = st.radio('Modo', ['Manual','Aleatoria'], horizontal=True)

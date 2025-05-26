@@ -197,3 +197,33 @@ if img is not None:
             ))
 
         st.plotly_chart(fig3d, use_container_width=True)
+
+# Pie de página
+st.markdown('<p class="giant-title">BrachyCervix</p>', unsafe_allow_html=True)
+st.markdown("""
+<hr>
+<div style="text-align:center;color:#28aec5;font-size:50px;">
+    BrachyCervix - Semiautomátización y visor para procesos de braquiterapia enfocados en el Cervix
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    Proyecto asignatura medialab 3
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    Universidad EAFIT
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    Clínica Las Américas AUNA
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    - Nicolás Ramirez
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    - Alejandra Montiel
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    - María Camila Díaz
+</div>
+<div style="text-align:center;color:#28aec5;font-size:20px;">
+    - María Paula Jaimes
+</div>
+""", unsafe_allow_html=True)

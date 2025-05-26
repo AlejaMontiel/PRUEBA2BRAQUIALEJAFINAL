@@ -112,8 +112,6 @@ if img is not None:
         if 'needles' not in st.session_state:
             st.session_state['needles'] = []
             resized = resize(original, (64,64,64), anti_aliasing=True)
-        if 'needles' not in st.session_state:
-            st.session_state['needles'] = []
 
         # Generar automáticamente 10 agujas fijas con Z aleatorio
         if 'auto_generated' not in st.session_state:

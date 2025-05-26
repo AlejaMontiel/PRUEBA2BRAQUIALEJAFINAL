@@ -106,15 +106,18 @@ if img is not None:
             img2d = apply_window(data, ww, wc)
             if invert: img2d = 1 - img2d
             ax.imshow(img2d, cmap='gray', origin='lower'); st.pyplot(fig)
+
+
 # 3D y agujas
 if st.sidebar.checkbox('Mostrar 3D', True):
     if 'needles' not in st.session_state:
         st.session_state['needles'] = []
 
+    # Asegurar que resized siempre esté definido
+    resized = resize(original, (64, 64, 64), anti_aliasing=True)
+
     if 'auto_generated' not in st.session_state:
         st.session_state['needles'] = []
-        resized = resize(original, (64, 64, 64), anti_aliasing=True)
-
         # Generar automáticamente 10 agujas fijas con Y y Z aleatorios
         for _ in range(10):
             y = random.uniform(30, 35)

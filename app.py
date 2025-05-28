@@ -179,6 +179,7 @@ if img is not None:
 
         # Render 3D
         xg, yg, zg = np.mgrid[0:64,0:64,0:64]
+        resized = resize(original, (64,64,64), anti_aliasing=True)
         fig3d = go.Figure(data=[go.Volume(
             x=xg.flatten(), y=yg.flatten(), z=zg.flatten(),
             value=resized.flatten(), opacity=0.1, surface_count=15, colorscale='Gray'

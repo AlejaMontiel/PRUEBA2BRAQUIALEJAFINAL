@@ -204,7 +204,6 @@ if img is not None:
 st.markdown('<p class="giant-title">BrachyCervix</p>', unsafe_allow_html=True)
 st.markdown("""
 st.markdown("""
-""", unsafe_allow_html=True)
 <hr>
 <div style="text-align:center;color:#28aec5;font-size:50px;">
     BrachyCervix - Semiautomátización y visor para procesos de braquiterapia enfocados en el Cervix

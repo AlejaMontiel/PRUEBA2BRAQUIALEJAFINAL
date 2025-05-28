@@ -203,6 +203,11 @@ if img is not None:
 # Pie de página
 st.markdown('<p class="giant-title">BrachyCervix</p>', unsafe_allow_html=True)
 st.markdown("""
+st.markdown("""
+<div style="text-align:center;">
+    <img src="https://raw.githubusercontent.com/AlejaMontiel/PRUEBA2BRAQUIALEJAFINAL/main/logo_footer.png" alt="Logo" style="height:100px;margin-bottom:20px;">
+</div>
+""", unsafe_allow_html=True)
 <hr>
 <div style="text-align:center;color:#28aec5;font-size:50px;">
     BrachyCervix - Semiautomátización y visor para procesos de braquiterapia enfocados en el Cervix
